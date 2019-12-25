@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Đăng nhập</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
+	<link rel="stylesheet" href="{{ asset('public/css/login.css') }}">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+	<script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+	<script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
+
+	<style>
+
+		.dangnhap a{
+			text-decoration: none;
+		}
+
+		h1{
+			color: red;
+			font-weight: bold;
+			text-shadow: 1px 4px black;
+		}
+
+		.dangnhap .btn-danger:focus{
+			outline: none;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 dangnhap">	
+				<a href="{{ route('getIndex') }}"><h1>SmartPhone.com.vn</h1></a>
+				<h3>Trung tâm cung cấp các thiết bị công nghệ thịnh hành nhất.</h3>
+				<br>
+				<h4><strong>Đăng nhập</strong></h4>
+				@include('alert')
+
+				<form action="{{ route('postLogin')}}" method="POST" role="form" class="form-login" data-toggle="validator" novalidate="true">
+
+					{{ csrf_field() }}	
+					
+					<div class="form-group">
+						<label for=""></label>
+						<input type="text" name="txt_email"  class="form-control" placeholder="Nhập email" id="" required="required" data-error="Vui lòng nhập email" >
+						<div class="help-block with-errors"></div>
+					</div>
+
+					<div class="form-group">
+						<input type="password"  name="txt_password"  class="form-control" placeholder="Mật khẩu" required="required" data-error="Vui lòng nhập mật khẩu">
+						<div class="help-block with-errors"></div>
+					</div>
+
+					<div class="form-group">
+			            <div class="captcha">
+			               <span>{!! captcha_img('flat') !!}</span>
+			               <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-refresh" id="refresh"></i></button>
+			            </div>
+			        </div>
+
+			        <div class="form-group">
+             			<input id="captcha" type="text" class="form-control" 
+             			placeholder="Enter Captcha" name="captcha" required="required" data-error="Vui lòng nhập captcha">
+             			<div class="help-block with-errors"></div>
+             		</div>
+
+					<button type="submit" class="btn btn-danger">Đăng Nhập</button>
+				</form>
+
+				<div class="quenmk navbar-left">
+					<a href="{{ route('getRegister') }}" style="color: #3512ce;">
+						<strong>Đăng ký</strong>
+					</a>
+				</div>
+
+				<div class="quenmk">
+					<a href="{{ route('getForgetPassword') }}" style="color: red;">
+						<strong>Quên mật khẩu ?</strong>
+					</a>
+				</div>
+			</div>
+
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 hinhphai">
+				<img src="{{ asset('public/image/Img_login.png') }}" class="img-responsive" alt="Image">
+			</div>
+		</div>
+	</div> <!-- container -->
+
+
+	<script type="text/javascript">
+
+        var msg2 = '{{Session::get('loi')}}';
+		var exist2 = '{{Session::has('loi')}}';
+		if(exist2){
+		    swal({
+		        title: "Bạn cần đăng nhập tài khoản admin để truy cập.",
+		        text: "",
+		        type: "success",
+		        timer: 1200,
+		        showConfirmButton: false,
+		        position: 'top-end',
+		    });
+		}
+
+		var msg1 = '{{Session::get('register_success')}}';
+	    var exist1 = '{{Session::has('register_success')}}';
+	    if(exist1){
+	        swal({
+	            title: "Đã đăng ký tài khoản thành công.",
+	            text: "",
+	            type: "success",
+	            timer: 1200,
+	            showConfirmButton: false,
+	            position: 'top-end',
+	        });
+	    }
+
+		var msg = '{{Session::get('success')}}';
+	    var exist = '{{Session::has('success')}}';
+	    if(exist){
+	        swal({
+	            title: "Đã thay đổi mật khẩu thành công.",
+	            text: "",
+	            type: "success",
+	            timer: 1200,
+	            showConfirmButton: false,
+	            position: 'top-end',
+	        });
+	    }
+
+	    $('#refresh').click(function(){
+		  	$.ajax({
+		     	type:'GET',
+		     	url:'refreshcaptcha',
+		     	success:function(data){
+		        	$(".captcha span").html(data.captcha);
+		     	}
+		  	});
+		});
+
+		function img_capcha() {
+            window.location.reload(true);
+        }
+
+	</script>
+</body>
+</html>
